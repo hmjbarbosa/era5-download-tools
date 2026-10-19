@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .venv/
+.vscode/
 
 # Credentials
 .env
@@ -13,5 +14,9 @@ __pycache__/
 *.grib2
 *.csv
 
-# Temporary download scripts
+# Subfolders (which just contain data)
+/*/
+
+# Temporary download scripts and output
 pull*.py
+*.out
