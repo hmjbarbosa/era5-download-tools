@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Credentials
+.env
+.cdsapirc
+
+# Research data
+*.nc
+*.grib
+*.grib2
+*.csv
+
+# Temporary download scripts
+pull*.py
