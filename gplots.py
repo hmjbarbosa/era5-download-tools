@@ -6,6 +6,13 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import numpy as np
 
+DIMENSIONS = {
+    'time': ('time', 'valid_time', 'start_time', 'datetime'),
+    'level': ('level', 'lev', 'pressure', 'plev', 'height', 'altitude', 'z'),
+    'latitude': ('degrees_north', 'latitude', 'lat'),
+    'longitude': ('degrees_east', 'longitude', 'lon'),
+}
+
 def addmap(p): 
     '''Take a plot handle p and adds geoaxis coast and grid lines.'''
     p.axes.coastlines(resolution="110m", color="black", linewidth=1)
@@ -59,15 +66,6 @@ def plotHov(da, yscale='linear'):
         orient_vertical(p.axes, da[spatial])
         p.axes.set_yscale(yscale)
     return p
-
-
-DIMENSIONS = {
-    'time': ('time', 'valid_time', 'start_time', 'datetime'),
-    'level': ('level', 'lev', 'pressure', 'plev', 'height', 'altitude', 'z'),
-    'latitude': ('degrees_north', 'latitude', 'lat'),
-    'longitude': ('degrees_east', 'longitude', 'lon'),
-}
-
 
 def find_dimension(da, kind):
     """Find a dimension name, ignoring capitalization."""
@@ -213,19 +211,37 @@ def main(argv=None):
                 da = da.sel({lon: args.lon}, method='nearest')
 
             # Maps default to the first time and level only when unspecified.
-            if args.plottype == 'map':
-                if time is not None and args.itime is None and args.time is None:
-                    da = da.isel({time: 0})
-                if level is not None and args.ilevel is None and args.level is None:
-                    da = da.isel({level: 0})
+            # if args.plottype == 'map':
+            #     if time is not None and args.itime is None and args.time is None:
+            #         da = da.isel({time: 0})
+            #     if level is not None and args.ilevel is None and args.level is None:
+            #         da = da.isel({level: 0})
 
-            da = validate_plot_data(da, args.plottype).load()
+            #da = validate_plot_data(da, args.plottype).load()
+
+            if not (len(da.dims) == 2): 
+                raise ValueError(f"Only two dimensions expected: {da.dims}")
+            
             if args.plottype == 'map':
+                # Lat and Lon 
+                if not ( (lat in da.dims) and (lon in da.dims) ): 
+                    raise ValueError(f"A map needs lat x lon: {da.dims}") 
                 p = plot2Dmap(da)
+
             elif args.plottype == 'vcr':
+                # (Lat xor Lon) and Level
+                if not ( ((lat in da.dims) + (lon in da.dims) == 1) and (level in da.dims) ): 
+                    raise ValueError(f"A cross section needs lat or lon x level: {da.dims}") 
                 p = plotVcross(da)
-            else:
+
+            elif args.plottype == 'hov':
+                # (Level xor Lat xor Lon) and Time
+                if not ( ((level in da.dims) + (lat in da.dims) + (lon in da.dims) == 1) and (time in da.dims) ): 
+                    raise ValueError(f"A Hovmoller needs level or lat or lon x time: {da.dims}") 
+                                
                 p = plotHov(da)
+            else: 
+                raise ValueError(f"Unknown plot type {args.plottype}")
 
             # apply log-scale to the axis, if asked
             if args.xlog:
