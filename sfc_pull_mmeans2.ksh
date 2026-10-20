@@ -1,4 +1,8 @@
 #!/usr/bin/ksh 
+# This script downloads monthly means era5-single-levels 
+#   - one variable per file, for a list of variables
+#   - one year per file, for a range of years
+#   - all 24 hours of the day
 
 typeset -Z4 yy
 typeset -Z2 mm
