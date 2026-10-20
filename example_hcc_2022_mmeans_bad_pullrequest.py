@@ -4,6 +4,19 @@ import cdsapi
 
 c = cdsapi.Client()
 
+# This shows the problem with the API. 
+#
+# Dataset is "reanalysis-era5-single-levels-monthly-means"
+# Product type is wrongly set to "reanalysis", without a "time" specification
+#
+# The ideal behaviout would be for the API to issue an error, since
+# there is no "renalysis" product in the "monthly means" dataset... and 
+# the "time" is missing 
+# 
+# However, it finishes without a warning, and the returned data is
+# not even a monthly-means... it is the 12Z of day 1st of the 
+# hourly data. 
+#
 c.retrieve("reanalysis-era5-single-levels-monthly-means",
 {
 "product_type": ["reanalysis"],

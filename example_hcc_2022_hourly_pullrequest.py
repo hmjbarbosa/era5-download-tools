@@ -4,6 +4,9 @@ import cdsapi
 
 c = cdsapi.Client()
 
+# This script downloads some hourly data to compare with the "bad"
+# and "good" monthly-mean datasets
+
 c.retrieve("reanalysis-era5-single-levels",
 {
 "product_type": ["reanalysis"],
