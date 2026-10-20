@@ -2,7 +2,6 @@
 # This script downloads monthly means era5-single-levels 
 #   - one variable per file, for a list of variables
 #   - one year per file, for a range of years
-#   - all 24 hours of the day
 
 typeset -Z4 yy
 typeset -Z2 mm
@@ -68,9 +67,6 @@ while [[ $((yy)) -le 2020 ]]; do
     mkdir -p ${TAG}/${VAR}
     TARGET="${TAG}/${VAR}/${VAR}_${yy}_${TAG}.nc"
     echo $TARGET
-
-   # "product_type": ["monthly_averaged_reanalysis_by_hour_of_day"],
-#     "product_type": ["monthly_averaged_reanalysis"],
 
 cat <<EOF > pullyear_${VAR}$yy.py
 #!/opt/miniconda3/envs/geo/bin/python

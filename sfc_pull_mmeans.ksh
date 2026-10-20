@@ -2,7 +2,6 @@
 # This script downloads monthly means era5-single-levels
 #   - one variable per file, for a list of variables
 #   - one month per file, for a range of dates
-#   - all 24 hours of the day
 ## NOTE: DO NOT USE THIS SCRIPT. 
 ## MONTHLY-SURFACE FILES ARE TOO SMALL, AND IT IS BETTER TO DOWNLOAD THE WHOLE YEAR. 
 
